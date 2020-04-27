@@ -1,3 +1,2 @@
-export { default as db } from './db'
-export { Email, Repo } from './models'
-
+export { default as db } from "./db";
+export { Email, Repo } from "./models";

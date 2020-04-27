@@ -53,8 +53,5 @@
     <li>
       <a class={segment === undefined ? 'selected' : ''} href=".">home</a>
     </li>
-    <li>
-      <a class={segment === 'git' ? 'selected' : ''} href="git">stalk</a>
-    </li>
   </ul>
 </nav>

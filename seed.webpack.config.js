@@ -1,13 +1,13 @@
-const path = require("path")
-const pkg = require("./package.json")
-const exec = require("child_process").exec
-const { unlink } = require("fs")
+const path = require("path");
+const pkg = require("./package.json");
+const exec = require("child_process").exec;
+const { unlink } = require("fs");
 
-const alias = { svelte: path.resolve("node_modules", "svelte") }
-const extensions = [".mjs", ".js", ".json", ".svelte", ".html"]
-const mainFields = ["svelte", "module", "browser", "main"]
+const alias = { svelte: path.resolve("node_modules", "svelte") };
+const extensions = [".mjs", ".js", ".json", ".svelte", ".html"];
+const mainFields = ["svelte", "module", "browser", "main"];
 
-const seedFile = "test_seed.js"
+const seedFile = "test_seed.js";
 
 module.exports = {
   mode: "none",
@@ -23,18 +23,18 @@ module.exports = {
   module: {},
   plugins: [
     {
-      apply: compiler => {
-        compiler.hooks.afterEmit.tap("AfterEmitPlugin", compilation => {
+      apply: (compiler) => {
+        compiler.hooks.afterEmit.tap("AfterEmitPlugin", (compilation) => {
           exec(`node ${seedFile}`, (err, stdout, stderr) => {
-            if (stdout) process.stdout.write(stdout)
-            if (stderr) process.stderr.write(stderr)
-            unlink(seedFile, () => {})
-          })
-        })
+            if (stdout) process.stdout.write(stdout);
+            if (stderr) process.stderr.write(stderr);
+            unlink(seedFile, () => {});
+          });
+        });
       },
     },
   ],
   performance: {
     hints: false, // it doesn't matter if server.js is large
   },
-}
+};
