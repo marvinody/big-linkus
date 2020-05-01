@@ -1,27 +1,33 @@
 import Sequelize from "sequelize";
 import db from "./db";
 
-export const Repo = db.define("repos", {
-  user: {
-    type: Sequelize.STRING,
-    allowNull: false,
-  },
-  name: {
+export const User = db.define("user", {
+  username: {
     type: Sequelize.STRING,
     allowNull: false,
   },
 });
 
-export const Email = db.define("emails", {
-  name: {
+export const AccessToken = db.define("accessToken", {
+  token: {
     type: Sequelize.STRING,
     allowNull: false,
   },
-  email: {
+  expires: {
+    type: Sequelize.DATE,
+  },
+});
+
+// refresh token should be encrypted at some point...
+export const RefreshToken = db.define("refreshToken", {
+  token: {
     type: Sequelize.STRING,
     allowNull: false,
   },
 });
 
-Repo.belongsToMany(Email, { through: "RepoEmails" });
-Email.belongsToMany(Repo, { through: "RepoEmails" });
+User.hasMany(AccessToken);
+AccessToken.belongsTo(User);
+
+User.hasMany(RefreshToken);
+RefreshToken.belongsTo(User);
