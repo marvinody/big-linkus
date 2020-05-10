@@ -1,5 +1,6 @@
 import axios from "axios";
 import qs from "qs";
+import { handleUserLogin } from "../../../utils";
 
 export async function get(req, res, next) {
   try {
@@ -14,7 +15,9 @@ export async function get(req, res, next) {
       }
     );
     const response = qs.parse(data);
+    console.log({ response });
     req.session.google_token = response.access_token;
+    await handleUserLogin(response);
     res.redirect("/");
   } catch (err) {
     console.error(err);

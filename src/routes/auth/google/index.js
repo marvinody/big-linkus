@@ -1,7 +1,10 @@
 import qs from "qs";
 
 export function get(req, res, next) {
-  const scopes = ["https://www.googleapis.com/auth/youtube.readonly"].join(" ");
+  const scopes = [
+    "https://www.googleapis.com/auth/youtube.readonly",
+    " openid profile",
+  ].join(" ");
 
   const url =
     "https://accounts.google.com/o/oauth2/auth?" +

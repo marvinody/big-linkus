@@ -1,45 +1,79 @@
 import axios from "axios";
+import { User, AccessToken, RefreshToken } from "../db";
+import moment from "moment";
 
-export const GithubApi = (token) => {
+export const YoutubeApi = (token) => {
   const ax = axios.create({
-    baseURL: "https://api.github.com/",
+    baseURL: "https://www.googleapis.com/",
     timeout: 5000,
-    headers: { Authorization: `token ${token}` },
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   });
 
   return {
-    usernameExists: async (username) => {
-      try {
-        // just a head so it'll be quick
-        await ax.head(`users/${username}`);
-        // and if we don't error out, we know it's gucci
-        return true;
-      } catch (err) {
-        // otherwise no good
-        return false;
-      }
+    getChannelInfo: async () => {
+      const { data } = await ax.get("/youtube/v3/channels", {
+        params: {
+          mine: "true",
+          part: ["snippet"].join(","),
+        },
+      });
+      return data;
     },
-    getRepos: async (username) => {
-      try {
-        // grab all their repos
-        const { data: repos } = await ax.get(`users/${username}/repos`);
-        // and just give them
-        return repos;
-      } catch (err) {
-        // otherwise no good
-        console.error(err);
-        return [];
-      }
-    },
-    getEmails: (user) => async (repo) => {
-      try {
-        // axios (not ax) because we want from OUR server, not github
-        const { data: emails } = await axios.get(`/git/${user}/${repo}.json`);
-        return emails;
-      } catch (err) {
-        console.error(err);
-        return [];
-      }
-    },
+    getStreamingStatus: async () => {},
   };
 };
+
+// grab the channel id
+// create or find user in db
+// update token entries if needed
+export const handleUserLogin = async ({
+  access_token,
+  expires_in,
+  refresh_token,
+}) => {
+  const yt = YoutubeApi(access_token);
+  const info = await yt.getChannelInfo();
+  const { id: channelId, ...userData } = info.items[0];
+  const username = userData.snippet.title;
+  const [user, created] = await User.findOrCreate({
+    where: { channelId },
+    defaults: {
+      username,
+      channelId,
+    },
+  });
+  await updateUserTokens({
+    user,
+    access_token,
+    expires_in,
+    refresh_token,
+  });
+  console.log({ created });
+  console.log(JSON.stringify(user, null, 2));
+};
+
+export const updateUserTokens = async ({
+  user,
+  access_token,
+  expires_in,
+  refresh_token,
+}) => {
+  const expires = moment()
+    .add(expires_in, "seconds")
+    .format("YYYY-MM-DD hh:mm:ss");
+
+  await AccessToken.create({
+    token: access_token,
+    expires,
+    userId: user.id,
+  });
+
+  await RefreshToken.create({
+    token: refresh_token,
+    userId: user.id,
+  });
+};
+
+export const GithubApi = () => {};

@@ -6,6 +6,10 @@ export const User = db.define("user", {
     type: Sequelize.STRING,
     allowNull: false,
   },
+  channelId: {
+    type: Sequelize.STRING,
+    unique: true,
+  },
 });
 
 export const AccessToken = db.define("accessToken", {
