@@ -1,16 +1,17 @@
 {
-  "name": "TODO",
+  "name": "big-linkus",
   "description": "TODO",
   "version": "0.0.1",
   "scripts": {
     "dev": "sapper dev",
-    "build": "sapper build --legacy",
+    "build": "sapper build --legacy && ",
     "export": "sapper export --legacy",
     "start": "node __sapper__/build",
     "cy:run": "cypress run",
     "cy:open": "cypress open",
     "seed": "webpack --config seed.webpack.config.js",
-    "test": "run-p --race dev cy:run"
+    "test": "run-p --race dev cy:run",
+    "build:bot": "webpack --config bot.webpack.config.js"
   },
   "dependencies": {
     "axios": "^0.19.0",
