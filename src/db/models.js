@@ -30,6 +30,28 @@ export const RefreshToken = db.define("refreshToken", {
   },
 });
 
+export const Broadcast = db.define("broadcast", {
+  ytId: {
+    type: Sequelize.STRING,
+    unique: true,
+  },
+  status: {
+    type: Sequelize.ENUM(
+      "created",
+      "live",
+      "liveStarting",
+      "ready",
+      "revoked",
+      "testStarting",
+      "testing",
+      "complete"
+    ),
+  },
+});
+
+User.hasMany(Broadcast);
+Broadcast.belongsTo(User);
+
 User.hasMany(AccessToken);
 AccessToken.belongsTo(User);
 
