@@ -25,6 +25,7 @@ express() // You can also use Express
         tokens: {
           google: req.session.google_token,
         },
+        username: req.session.username,
       }),
     })
   )

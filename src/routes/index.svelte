@@ -1,3 +1,10 @@
+<script>
+  import { stores, goto } from "@sapper/app";
+  const { session } = stores();
+  $: loggedIn = !!$session.tokens.google;
+  $: username = $session.username;
+</script>
+
 <style>
   h1,
   p {
@@ -60,7 +67,11 @@
   steps, a bot will periodically check your status and send out a message if it
   detects you as live.
 </p>
-
-<a href="/auth/google">
-  <button class="center">Sign Up with Google</button>
-</a>
+{#if loggedIn}
+  <h2>Welcome {username}</h2>
+  <p>You are being monitored by this bot already!</p>
+{:else}
+  <a href="/auth/google">
+    <button class="center">Sign Up with Google</button>
+  </a>
+{/if}

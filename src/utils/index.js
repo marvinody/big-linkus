@@ -103,6 +103,7 @@ export const handleUserLogin = async ({
     expires_in,
     refresh_token,
   });
+  return user;
 };
 
 export const updateUserTokens = async ({
@@ -126,5 +127,3 @@ const createAccessToken = ({ access_token, expires_in, userId }) => {
     userId,
   });
 };
-
-export const GithubApi = () => {};

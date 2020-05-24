@@ -17,7 +17,8 @@ export async function get(req, res, next) {
     const response = qs.parse(data);
     console.log({ response });
     req.session.google_token = response.access_token;
-    await handleUserLogin(response);
+    const user = await handleUserLogin(response);
+    req.session.username = user.username;
     res.redirect("/");
   } catch (err) {
     console.error(err);
