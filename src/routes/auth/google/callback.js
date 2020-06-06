@@ -22,6 +22,6 @@ export async function get(req, res, next) {
     res.redirect("/");
   } catch (err) {
     console.error(err);
-    next(err);
+    res.redirect("/");
   }
 }
