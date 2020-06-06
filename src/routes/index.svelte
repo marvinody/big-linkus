@@ -1,8 +1,14 @@
 <script>
   import { stores, goto } from "@sapper/app";
+  import axios from "axios";
   const { session } = stores();
-  $: loggedIn = !!$session.tokens.google;
+  $: loggedIn = !!$session.username;
   $: username = $session.username;
+
+  const logout = () => {
+    axios.post("/auth/logout");
+    session.set({ username: undefined });
+  };
 </script>
 
 <style>
@@ -70,6 +76,7 @@
 {#if loggedIn}
   <h2>Welcome {username}</h2>
   <p>You are being monitored by this bot already!</p>
+  <button class="center" on:click={logout}>Logout</button>
 {:else}
   <a href="/auth/google">
     <button class="center">Sign Up with Google</button>
