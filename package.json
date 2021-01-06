@@ -14,7 +14,7 @@
     "build:bot": "webpack --config bot.webpack.config.js"
   },
   "dependencies": {
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "child-process-promise": "^2.2.1",
     "compression": "^1.7.1",
     "dotenv": "^8.2.0",
